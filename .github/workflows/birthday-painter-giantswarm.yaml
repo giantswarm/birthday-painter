@@ -1,0 +1,19 @@
+name: Birthday Painter for Giant Swarm Slack
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '5 8 * * *'
+
+jobs:
+  birthday-painter:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: List absences for each channel where Birthday Painter was added
+        id: birthday-painter
+        uses: giantswarm/birthday-painter@main
+        with:
+          PERSONIO_CLIENT_ID: "${{ secrets.PERSONIO_CLIENT_ID }}"
+          PERSONIO_CLIENT_SECRET: "${{ secrets.PERSONIO_CLIENT_SECRET }}"
+          SLACK_USER_TOKEN: "${{ secrets.SLACK_USER_TOKEN }}"
+          SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
+          GEMINI_API_KEY: "${{ secrets.GEMINI_API_KEY }}"

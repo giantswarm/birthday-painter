@@ -1,0 +1,23 @@
+name: birthday-painter
+description: |
+  Paints birthday image and posts it to Slack channel.
+inputs:
+  PERSONIO_CLIENT_ID:
+    required: true
+    description: A valid Personio client ID with read access to employee info.
+  PERSONIO_CLIENT_SECRET:
+    required: true
+    description: A valid Personio client secret with read access to employee first name, last name, status, gender, date of birth, city and country.
+  SLACK_USER_TOKEN:
+    required: true
+    description: A valid Slack user token with `users:read`, `users:read.email` and `users.profile:read` scopes.
+  SLACK_BOT_TOKEN:
+    required: true
+    description: A valid Slack bot token with `channels:read`, `groups:read`, `chat:write`, `files:write`, `users:read` and `users:read.email` scopes.
+  GEMINI_API_KEY:
+    required: true
+    description: A valid Google Gemini API key to generate birthday images.
+outputs: {}
+runs:
+  using: node20
+  main: index.mjs
