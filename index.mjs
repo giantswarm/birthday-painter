@@ -354,10 +354,12 @@ async function uploadImageToSlack(fileBuffer, filename, channelIds, initialComme
     const {uploadUrl, fileId} = await getSlackUploadURL(filename, fileBuffer.length);
     await uploadFileToSlackURL(uploadUrl, fileBuffer);
 
+    const files = [];
     for (const channelId of channelIds) {
         console.log(`Sharing image with Slack channel ${channelId}`);
-        return await completeSlackFileUpload(fileId, filename, channelId, initialComment);
+        files.push(await completeSlackFileUpload(fileId, filename, channelId, initialComment));
     }
+    return files;
 }
 
 async function main() {
