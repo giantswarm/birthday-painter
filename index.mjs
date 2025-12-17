@@ -373,7 +373,7 @@ async function main() {
         console.log(`Found ${birthdayEmployees.length} birthday(s) today`);
 
         const slackUsers = [];
-        for await (const employee of birthdayEmployees) {
+        for (const employee of birthdayEmployees) {
             const email = employee.attributes.email?.value;
             if (!email) {
                 slackUsers.push(null);
