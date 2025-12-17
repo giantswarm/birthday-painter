@@ -8,7 +8,7 @@ jobs:
   birthday-painter:
     runs-on: ubuntu-24.04
     steps:
-      - name: List absences for each channel where Birthday Painter was added
+      - name: Create and post today birthday images in Slack channel `#random`
         id: birthday-painter
         uses: giantswarm/birthday-painter@main
         with:
