@@ -123,7 +123,7 @@ function getEmployeesWithBirthdayToday(employees, date = new Date()) {
     const bdayKey = findAttributeKeyByLabel(employees[0]?.attributes || {}, "Date of birth");
     const todayMonthDay = toMonthDay(date);
     return employees.filter(employee => {
-        return (employee?.attributes?.[bdayKey]?.value || '').substring(5, 10) === todayMonthDay
+        return employee.attributes.email?.value && (employee?.attributes?.[bdayKey]?.value || '').substring(5, 10) === todayMonthDay
     });
 }
 
@@ -374,12 +374,7 @@ async function main() {
 
         const slackUsers = [];
         for (const employee of birthdayEmployees) {
-            const email = employee.attributes.email?.value;
-            if (!email) {
-                slackUsers.push(null);
-                continue;
-            }
-            const slackUser = await getSlackUserByEmail(email);
+            const slackUser = await getSlackUserByEmail(employee.attributes.email.value);
             slackUsers.push(slackUser);
         }
         const channels = await getCursorPaginatedSlackData(false, 'users.conversations?types=public_channel,private_channel&exclude_archived=true', 'channels');
