@@ -364,7 +364,7 @@ async function main() {
     try {
         const personioToken = await getPersonioToken();
         const employees = await getActiveEmployees(personioToken);
-        const birthdayEmployees = getEmployeesWithBirthdayToday(employees, new Date('2025-08-09'));
+        const birthdayEmployees = getEmployeesWithBirthdayToday(employees, new Date());
 
         if (birthdayEmployees.length === 0) {
             console.log('No birthdays today');
