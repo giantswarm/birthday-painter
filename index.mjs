@@ -355,10 +355,14 @@ async function completeSlackFileUpload(fileId, filename, channelId, initialComme
     return data.files?.[0];
 }
 
-async function uploadImageToSlack(fileBuffer, filename, channelId, initialComment = null) {
+async function uploadImageToSlack(fileBuffer, filename, channelIds, initialComment = null) {
     const {uploadUrl, fileId} = await getSlackUploadURL(filename, fileBuffer.length);
     await uploadFileToSlackURL(uploadUrl, fileBuffer);
-    return await completeSlackFileUpload(fileId, filename, channelId, initialComment);
+
+    for (const channelId of channelIds) {
+        console.log(`Sharing image with Slack channel ${channelId}`);
+        return await completeSlackFileUpload(fileId, filename, channelId, initialComment);
+    }
 }
 
 async function main() {
@@ -383,23 +387,18 @@ async function main() {
             const slackUser = await getSlackUserByEmail(email);
             slackUsers.push(slackUser);
         }
-        const channelName = 'echo-chamber';
         const channels = await getCursorPaginatedSlackData(false, 'users.conversations?types=public_channel,private_channel&exclude_archived=true', 'channels');
-        const targetChannel = channels.find(c => c.name === channelName);
-        if (!targetChannel) {
-            console.error(`Target channel ${channelName} not found`);
-            return;
+        if (channels.length) {
+            console.log('Generating birthday image with Gemini...');
+            const {buffer: imageBuffer, filename} = await generateBirthdayImage(birthdayEmployees, slackUsers);
+
+            console.log('Uploading image to Slack...');
+            const mentions = slackUsers
+                .filter(u => u?.id)
+                .map(u => `<@${u.id}>`)
+                .join(' ');
+            await uploadImageToSlack(imageBuffer, filename, channels.map(c => c.id), mentions ? mentions + ' :birthday-cake:' : null);
         }
-
-        console.log('Generating birthday image with Gemini...');
-        const {buffer: imageBuffer, filename} = await generateBirthdayImage(birthdayEmployees, slackUsers);
-
-        console.log('Uploading image to Slack...');
-        const mentions = slackUsers
-            .filter(u => u?.id)
-            .map(u => `<@${u.id}>`)
-            .join(' ');
-        await uploadImageToSlack(imageBuffer, filename, targetChannel.id, mentions ? mentions + ' :birthday-cake:' : null);
 
         console.log('Birthday Painter processing complete');
     } catch (error) {
