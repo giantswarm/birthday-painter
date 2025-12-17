@@ -366,7 +366,7 @@ async function main() {
 
         if (birthdayEmployees.length === 0) {
             console.log('No birthdays today');
-            return;
+            return true;
         }
         console.log(`Found ${birthdayEmployees.length} birthday(s) today`);
 
@@ -391,7 +391,12 @@ async function main() {
         console.log('Birthday Painter processing complete');
     } catch (error) {
         console.error('Error in main execution:', error);
+        return false;
     }
+
+    return true;
 }
 
-await main();
+if (!await main()) {
+    process.exit(1);
+}
