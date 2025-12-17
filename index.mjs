@@ -1,5 +1,3 @@
-import {readFile} from 'fs/promises';
-
 function getInput(name) {
     return (process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] || '').trim()
 }
@@ -318,14 +316,12 @@ async function uploadFileToSlackURL(uploadUrl, fileBuffer) {
     }
 }
 
-async function completeSlackFileUpload(fileId, filename, channelId, initialComment = null) {
+async function completeSlackUploadExternal(fileId, filename, channelId, initialComment = null) {
     const requestBody = {
-        files: [
-            {
-                id: fileId,
-                title: filename,
-            }
-        ],
+        files: [{
+            id: fileId,
+            title: filename,
+        }],
         channel_id: channelId,
     };
 
@@ -357,7 +353,7 @@ async function uploadImageToSlack(fileBuffer, filename, channelIds, initialComme
     const files = [];
     for (const channelId of channelIds) {
         console.log(`Sharing image with Slack channel ${channelId}`);
-        files.push(await completeSlackFileUpload(fileId, filename, channelId, initialComment));
+        files.push(await completeSlackUploadExternal(fileId, filename, channelId, initialComment));
     }
     return files;
 }
