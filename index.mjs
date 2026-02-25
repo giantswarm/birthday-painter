@@ -173,7 +173,7 @@ async function generateBirthdayImage(employees, slackUsers) {
     parts.push({
         text: `The following staff members have birthday at the specified days.
         Lookup a *single* (pick the most nerdy, noteworthy, positive, funny) historic event fact/event/scene/happening
-        on or around this day of the year, that is loosely relevant to that staff members style/location and is somewhat
+        on this calendar day of the year, that is loosely relevant to that staff members style/location and is somewhat
         suitable for visualization in an image.
         Pick the most curious/important/fun/visualizable scene and render and image with the staff member(s) prominently
         featuring inside and taking part in the activities/event (profile pictures of staff members attached after
