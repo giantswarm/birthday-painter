@@ -2,7 +2,7 @@ name: Birthday Painter for Giant Swarm Slack
 on:
   workflow_dispatch:
   schedule:
-    - cron: '5 8 * * *'
+    - cron: '50 9 * * *'
 
 jobs:
   birthday-painter:
