@@ -8,5 +8,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - added: First Birthday Painter prototype GitHub action according to the spec.
+- changed: Switch image generation to the GA `gemini-3-pro-image` model, as the `gemini-3-pro-image-preview` model is deprecated and being shut down.
 
 [Unreleased]: https://github.com/giantswarm/birthday-painter/tree/main
