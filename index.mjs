@@ -220,7 +220,7 @@ async function generateBirthdayImage(employees, slackUsers) {
     }
 
     for (let attempt = 1; attempt <= 3; attempt++) {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image-preview:generateContent?key=${GEMINI_API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-pro-image:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: {
                 'x-goog-api-key': GEMINI_API_KEY,
