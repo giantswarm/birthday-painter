@@ -99,6 +99,8 @@ async function getCursorPaginatedSlackData(asUser, endpoint, resultKey, initialC
     return results;
 }
 
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
 function toMonthDay(date) {
     const month = ('' + (date.getMonth() + 1)).padStart(2, '0');
     const day = ('' + date.getDate()).padStart(2, '0');
@@ -151,10 +153,10 @@ function buildEmployeeDataText(employee) {
     const gender = employee.attributes.gender?.value || '';
     const office = employee.attributes.office?.value?.attributes?.name || '';
     const bdayKey = findAttributeKeyByLabel(employee.attributes || {}, "Date of birth");
-    const bday = new Date(employee?.attributes?.[bdayKey]?.value);
-
-    const month = bday.toLocaleString('en-US', {month: 'short'});
-    const day = bday.getDate();
+    // Personio returns birthdays like "1988-04-28T00:00:00+02:00", take care to prevent time zone shift
+    const bdayValue = employee?.attributes?.[bdayKey]?.value || '';
+    const month = MONTH_NAMES[parseInt(bdayValue.substring(5, 7), 10) - 1] || '';
+    const day = parseInt(bdayValue.substring(8, 10), 10) || '';
 
     return `${firstName} ${lastName}, ${gender}, ${month} ${day}, ${office}`;
 }
@@ -168,10 +170,11 @@ function generateBirthdayFilename(slackUsers, extension) {
     return sanitizedHandles ? `birthday-${sanitizedHandles}.${extension}` : `birthday-generated.${extension}`;
 }
 
-async function generateBirthdayImage(employees, slackUsers) {
+async function generateBirthdayImage(employees, slackUsers, date = new Date()) {
+    const todayText = `${MONTH_NAMES[date.getMonth()]} ${date.getDate()}`;
     const parts = [];
     parts.push({
-        text: `The following staff members have birthday at the specified days.
+        text: `Today is ${todayText}. The following staff members have birthday today, at the specified calendar day.
         Lookup a *single* (pick the most nerdy, noteworthy, positive, funny) historic event fact/event/scene/happening
         on this calendar day of the year, that is loosely relevant to that staff members style/location and is somewhat
         suitable for visualization in an image.
