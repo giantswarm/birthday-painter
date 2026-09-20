@@ -6,7 +6,7 @@ on:
 
 jobs:
   birthday-painter:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     steps:
       - name: Create and post today birthday images in Slack channel `#random`
         id: birthday-painter
