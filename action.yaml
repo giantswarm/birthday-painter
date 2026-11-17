@@ -17,6 +17,10 @@ inputs:
   GEMINI_API_KEY:
     required: true
     description: A valid Google Gemini API key to generate birthday images.
+  DATE:
+    required: false
+    default: ''
+    description: Calendar day to paint birthdays for, as `YYYY-MM-DD` or `MM-DD` (current year). Defaults to today.
 outputs: {}
 runs:
   using: node20
