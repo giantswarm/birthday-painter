@@ -1,6 +1,12 @@
 name: Birthday Painter for Giant Swarm Slack
 on:
   workflow_dispatch:
+    inputs:
+      date:
+        description: 'Calendar day to run for, as YYYY-MM-DD or MM-DD (empty = today)'
+        required: false
+        default: ''
+        type: string
   schedule:
     - cron: '50 7 * * *'
 
@@ -8,7 +14,7 @@ jobs:
   birthday-painter:
     runs-on: ubuntu-26.04
     steps:
-      - name: Create and post today birthday images in Slack channel `#random`
+      - name: Create and post birthday images (today or selected date) in Slack channel `#random`
         id: birthday-painter
         uses: giantswarm/birthday-painter@main
         with:
@@ -17,3 +23,4 @@ jobs:
           SLACK_USER_TOKEN: "${{ secrets.SLACK_USER_TOKEN }}"
           SLACK_BOT_TOKEN: "${{ secrets.SLACK_BOT_TOKEN }}"
           GEMINI_API_KEY: "${{ secrets.GEMINI_API_KEY }}"
+          DATE: "${{ inputs.date }}"
